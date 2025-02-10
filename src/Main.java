@@ -89,7 +89,7 @@ public class Main {
         // Add a reservation for the customer first
         Reservation reservation = new Reservation(4, "2025-02-10 19:00");
         customer.addReservation(reservation);  // Ajoute la réservation avant de passer la commande
-        
+
 
         // Create an order for the customer
         try {
@@ -143,13 +143,6 @@ public class Main {
         for (Reservation res : customer.getReservations()) {
             System.out.println(res);
         }
-    //Interface utilisateur : Pour rendre le programme plus interactif,
-        // tu pourrais utiliser un Scanner pour permettre à un utilisateur (ou un administrateur)
-        // d'entrer des informations et d’interagir avec le système.
-        // Par exemple, un utilisateur pourrait ajouter un plat au menu, passer une commande,
-        // ou réserver une table.
-        //Manipulation des commandes :
-        // Tu pourrais aussi ajouter des méthodes pour changer l’état d’une commande
-        // (par exemple, passer d' "EN COURS" à "SERVI").
+
     }
 }
