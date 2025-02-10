@@ -3,7 +3,17 @@ public class Employee {
     private RoleEmployee roleEmployee;
     private double salary;
 
-    public Employee(String name, RoleEmployee roleEmployee, double salary){
+    public Employee(String name, RoleEmployee roleEmployee, double salary) throws RestaurantException{
+        if (name == null || name.isEmpty()) {
+            throw new RestaurantException("Employee name cannot be empty.");
+        }
+        if (salary <= 0) {
+            throw new RestaurantException("The employee's salary must be greater than zero.");
+        }
+        if (roleEmployee == null) {
+            throw new RestaurantException("The employee role is required.");
+        }
+
         this.name = name;
         this.roleEmployee = roleEmployee;
         this.salary = salary;

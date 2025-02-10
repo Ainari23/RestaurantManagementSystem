@@ -1,7 +1,7 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RestaurantException{
         System.out.print("Hello and welcome to you restaurant System!");
         //Fonctionnalités :
         Menu menu = new Menu();//Gere un menu vide
@@ -15,30 +15,59 @@ public class Main {
         //Add a few dishes on the menu.
         Dish dish1 = null;
         try {
-             dish1 = new Dish("Salade César", -12.50, "Salade avec poulet, croutons et sauce", entree);
-        } catch (IllegalArgumentException e) {
+             dish1 = new Dish("Salade César", 12.50, "Salade avec poulet, croutons et sauce", entree);
+        } catch (RestaurantException e) {
             System.out.println("Erreur lors de la création du plat : " + e.getMessage());
         }
-        Dish dish2 = new Dish("Burger Classique", 15.00, "Burger avec viande de boeuf, fromage, salade", plat);
-        Dish dish3 = new Dish("Tiramisu", 7.50, "Dessert à base de mascarpone et de café", dessert);
+        Dish dish2 = null;
+        try {
+            dish2 = new Dish("Burger Classique", 15.00, "Burger avec viande de boeuf, fromage, salade", plat);
+        } catch (RestaurantException e) {
+            System.out.println("Erreur lors de la création du plat : " + e.getMessage());
+        }
 
-        menu.addDish(dish1);
-        menu.addDish(dish2);
-        menu.addDish(dish3);
+        Dish dish3 = null;
+        try {
+            dish3 = new Dish("Tiramisu", 7.50, "Dessert à base de mascarpone et de café", dessert);
+        } catch (RestaurantException e) {
+            System.out.println("Erreur lors de la création du plat : " + e.getMessage());
+        }
+
+        // Ajoute les plats au menu, mais vérifie si dish1 est null pour éviter une exception
+        if (dish1 != null) {
+            menu.addDish(dish1);
+        }
+        if (dish2 != null) {
+            menu.addDish(dish2);
+        }
+        if (dish3 != null) {
+            menu.addDish(dish3);
+        }
+
         //Print dishes and menu
         System.out.println(("Menu du jour : "));
         for (Dish dish : menu.getDishes()){
             System.out.println("-"+dish);
         }
+        if (dish1 != null) {
+            menu.addDish(dish1);
+        }
+        if (dish2 != null) {
+            menu.addDish(dish2);
+        }
+        if (dish3 != null) {
+            menu.addDish(dish3);
+        }
+
         try {
             Dish orderedDish = menu.getDishByName("Pizza");
-            System.out.println("Plat trouvé : " + orderedDish);
+            System.out.println("Dishes found : " + orderedDish);
         } catch (Menu.DishNotFoundException e) {
-            System.out.println("Erreur : " + e.getMessage());
+            System.out.println("Error : " + e.getMessage());
         }
 
 
-        //Create employee
+        //Create employees Role
         RoleEmployee chefRole = new RoleEmployee("Chef");
         RoleEmployee waiterRole = new RoleEmployee("Waiter");
 
@@ -53,26 +82,52 @@ public class Main {
         for (Employee employee : employeeManager.getEmployees()){
             System.out.println("-"+employee);
         }
-        //Create a customer
+
+        // Create a customer
         Customer customer = new Customer(1, "John Doe");
 
+        // Add a reservation for the customer first
+        Reservation reservation = new Reservation(4, "2025-02-10 19:00");
+        customer.addReservation(reservation);  // Ajoute la réservation avant de passer la commande
+        
+
+        // Create an order for the customer
         try {
-            // Tentative de passer une commande sans réservation
-            Order order = new Order(1, "EN COURS");
-            customer.placeOrder(order);
+            // Create an order with status "EN COURS" (In Progress)
+            Order order1 = new Order("EN COURS");  // Order status
+            // Add a dish to the order
+            order1.addDish(dish1);  // Add the "Salad Caesar" dish
+            customer.placeOrder(order1);  // Place the order
         } catch (IllegalStateException e) {
-            System.out.println("Erreur : " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
+        try {
+            // Create another order for the customer
+            Order order2 = new Order("EN COURS");  // Order status
+            // Add a dish to the order
+            order2.addDish(dish2);  // Add the "Classic Burger" dish
+            customer.placeOrder(order2);  // Place the order
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
 
-        //Add an order for the customer
-        Order order1 = new Order(1, "En cours");
-        order1.getOrderDishes().add(dish1);
-        customer.addOrder(order1);
+        try {
+            // Create another order for the customer
+            Order order3 = new Order("EN COURS");  // Order status
+            // Add a dish to the order
+            order3.addDish(dish3);  // Add the "Tiramisu" dish
+            customer.placeOrder(order3);  // Place the order
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
 
-        //Add a reservation for a customer
-        Reservation reservation = new Reservation(4, "2025-02-10 19:00");
-        customer.addReservation(reservation);
+// Display the customer's orders
+        System.out.println("\nCustomers Order : ");
+        for (Order order : customer.getOrders()) {
+            System.out.println(order);  // Display the order and its dishes
+        }
+
 
         //Show details about the customer
         System.out.println("\n Information about the Client : ");
@@ -88,6 +143,13 @@ public class Main {
         for (Reservation res : customer.getReservations()) {
             System.out.println(res);
         }
-
+    //Interface utilisateur : Pour rendre le programme plus interactif,
+        // tu pourrais utiliser un Scanner pour permettre à un utilisateur (ou un administrateur)
+        // d'entrer des informations et d’interagir avec le système.
+        // Par exemple, un utilisateur pourrait ajouter un plat au menu, passer une commande,
+        // ou réserver une table.
+        //Manipulation des commandes :
+        // Tu pourrais aussi ajouter des méthodes pour changer l’état d’une commande
+        // (par exemple, passer d' "EN COURS" à "SERVI").
     }
 }

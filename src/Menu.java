@@ -8,13 +8,16 @@ public class Menu {
         this.dishes = new ArrayList<>();
     }
     //Add Dishes
-    public void addDish(Dish dish){
+    public void addDish(Dish dish) throws RestaurantException{
+        if (dish == null){
+            throw new RestaurantException("Dishes cannot be null");
+        }
         this.dishes.add(dish);
     }
     public List<Dish> getDishes(){
         return dishes;
     }
-    public class DishNotFoundException extends Exception{
+    public class DishNotFoundException extends RestaurantException{
         public DishNotFoundException(String message){
             super(message);
         }
@@ -22,11 +25,11 @@ public class Menu {
     //Method to search for a dish by name
     public Dish getDishByName(String name) throws DishNotFoundException {
         for (Dish dish : dishes) {
-            if (dish != null && dish.getName().equalsIgnoreCase(name)) {  // Vérifie si le plat n'est pas null
+            if (dish != null && dish.getName() != null && dish.getName() .equalsIgnoreCase(name)) {  // Vérifie si le plat n'est pas null
                 return dish;
             }
         }
-        throw new DishNotFoundException("Plat non trouvé : " + name);
+        throw new DishNotFoundException("Dish not found : " + name);
     }
 
 }

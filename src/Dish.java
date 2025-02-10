@@ -7,11 +7,20 @@ public class Dish {
     private String description;
     private DishCategory dishCategories;//Catégorie associé
 
-    public Dish(String name, double price, String description, DishCategory dishCategories) throws IllegalArgumentException{
-        this.name = name;
-        if (price <=0){
-            throw new IllegalArgumentException("Price must be greater than zero");
+    public Dish(String name, double price, String description, DishCategory dishCategories) throws RestaurantException{
+        if (name == null || name.isEmpty()){
+            throw new RestaurantException("Dishes name canot be blank");
         }
+        if (price <=0){
+            throw new RestaurantException("Price must be greater than zero");
+        }
+        if (description== null || description.isEmpty()){
+            throw new RestaurantException("Description cannot be blank");
+        }
+        if (dishCategories == null){
+            throw new RestaurantException("Categories is required");
+        }
+        this.name=name;
         this.price = price;
         this.description = description;
         this.dishCategories = dishCategories;

@@ -2,12 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
+    private static int nextId = 1;
     private int idCommand;
     private List<Dish> orderDishes;
     private String status;
 
-    public Order(int idCommand, String status){
-        this.idCommand = idCommand;
+    public Order(String status){
+        this.idCommand = nextId++;
         this.orderDishes = new ArrayList<>();
         this.status = "EN COURS";
     }
@@ -34,6 +35,12 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    public void addDish(Dish dish) throws RestaurantException{
+        if (dish == null){
+            throw new RestaurantException("Dish cannot be null");
+        }
+        orderDishes.add(dish);
     }
 
 
