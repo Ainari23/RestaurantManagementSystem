@@ -9,10 +9,9 @@ public class Menu {
     }
     //Add Dishes
     public void addDish(Dish dish) throws RestaurantException{
-        if (dish == null){
-            throw new RestaurantException("Dishes cannot be null");
+        if (dish != null && !dishes.contains(dish)) {
+            dishes.add(dish);
         }
-        this.dishes.add(dish);
     }
     public List<Dish> getDishes(){
         return dishes;

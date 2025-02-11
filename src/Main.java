@@ -5,7 +5,8 @@ public class Main {
         System.out.print("Hello and welcome to you restaurant System!");
         //Fonctionnalités :
         Menu menu = new Menu();//Gere un menu vide
-        EmployeeManager employeeManager = new EmployeeManager();//Gestion des employés
+        EmployeeRepository employeeRepository = new EmployeeRepository();
+        EmployeeManager employeeManager = new EmployeeManager(employeeRepository);//Gestion des employés
 
         //Create a few dishe's category
         DishCategory entree = new DishCategory("Entrée");
@@ -71,16 +72,19 @@ public class Main {
         RoleEmployee chefRole = new RoleEmployee("Chef");
         RoleEmployee waiterRole = new RoleEmployee("Waiter");
 
-        Employee chef = new Employee("Marc", chefRole, 3000);
-        Employee waiter = new Employee("Claire", waiterRole, 1500);
+        Employee employee1 = new Employee("Marc", chefRole, 3000);
+        Employee employee2 = new Employee("Claire", waiterRole, 1500);
+        employeeManager.addEmployee(employee1);
+        employeeManager.addEmployee(employee2);
 
-        employeeManager.addEmployee(chef);
-        employeeManager.addEmployee(waiter);
+        //Updating an employee's role
+        employeeManager.updateRole(employee1, "Senior Chef");
+
 
         //Print employee
-        System.out.println("\nEmployees List :");
-        for (Employee employee : employeeManager.getEmployees()){
-            System.out.println("-"+employee);
+        System.out.println("\nEmployees List : ");
+        for (Employee employee : employeeRepository.getAllEmployee()){
+            System.out.println("-"+employee.getName()+"-"+employee.getRoleEmployee()+"\n");
         }
 
         // Create a customer
@@ -98,6 +102,9 @@ public class Main {
             // Add a dish to the order
             order1.addDish(dish1);  // Add the "Salad Caesar" dish
             customer.placeOrder(order1);  // Place the order
+            order1.setInProgress();      // Set order status to "In Progress"
+            order1.setReady();           // Set order status to "Ready"
+            order1.setServed();          // Set order status to "Served"
         } catch (IllegalStateException e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -108,6 +115,7 @@ public class Main {
             // Add a dish to the order
             order2.addDish(dish2);  // Add the "Classic Burger" dish
             customer.placeOrder(order2);  // Place the order
+            order2.setInProgress();
         } catch (IllegalStateException e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -118,16 +126,10 @@ public class Main {
             // Add a dish to the order
             order3.addDish(dish3);  // Add the "Tiramisu" dish
             customer.placeOrder(order3);  // Place the order
+            order3.setInProgress();
         } catch (IllegalStateException e) {
             System.out.println("Error: " + e.getMessage());
         }
-
-// Display the customer's orders
-        System.out.println("\nCustomers Order : ");
-        for (Order order : customer.getOrders()) {
-            System.out.println(order);  // Display the order and its dishes
-        }
-
 
         //Show details about the customer
         System.out.println("\n Information about the Client : ");
